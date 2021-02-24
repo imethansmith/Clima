@@ -9,6 +9,7 @@
 import Foundation
 
 var cityName = "Auckland"
+var weatherConditionSymbol: String?
 
 struct WeatherManager {
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=254f77517e04920912bf344cb3d6482e"
@@ -46,9 +47,14 @@ struct WeatherManager {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
-            print(decodedData.name)
-            print(decodedData.main.temp)
-            print(decodedData.weather[0].description)
+            let id = decodedData.weather[0].id
+            let name = decodedData.name
+            let temp = decodedData.main.temp
+            
+            let weather = WeatherModel(conditionID: id, cityName: name, temperature: temp)
+            
+            print(weather.conditionName)
+            print(weather.temperatureString)
         } catch {
             print(error)
         }

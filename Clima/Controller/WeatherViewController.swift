@@ -36,6 +36,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let city = searchTextField.text {
             weatherManager.fetchWeather(cityName: city)
+            updateUI()
         }
         searchTextField.text = ""
     }
@@ -47,6 +48,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
             textField.placeholder = "Choose a Location"
             return false
         }
+    }
+    
+    func updateUI() {
+//        conditionImageView.image = UIImage(systemName: weatherManager.getCurrentWeatherSymbol())
     }
 }
 
