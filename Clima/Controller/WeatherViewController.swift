@@ -86,9 +86,10 @@ extension WeatherViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationManager.stopUpdatingLocation()
         let lat = locations[0].coordinate.latitude
         let lon = locations[0].coordinate.longitude
-        weatherManager.fetchWeatherByCoordinate(lat, lon)
+        weatherManager.fetchWeather(lat, lon)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
