@@ -9,7 +9,6 @@
 import Foundation
 
 var cityName = "Auckland"
-let jsonReceiver = JSONDecoder()
 
 struct WeatherManager {
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?&units=metric&appid=254f77517e04920912bf344cb3d6482e"
@@ -27,23 +26,31 @@ struct WeatherManager {
             let session = URLSession(configuration: .default)
             
             // Give session a task
-            let task = session.dataTask(with: url, completionHandler: handle(data:response:error:) )
+            let task = session.dataTask(with: url) { (data, response, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                if let safeData = data {
+                    parseJSON(weatherData: safeData)
+                }
+            }
             
             // Start the session task
             task.resume()
         }
     }
     
-    func handle(data: Data?, response: URLResponse?, error: Error?) {
-        if error != nil {
-            print(error!)
-            return
-        }
-        
-        if let safeData = data {
-            let dataString = String(data: safeData, encoding: .utf8)
-            print(dataString)
+    func parseJSON(weatherData: Data) {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(WeatherData.self, from: weatherData)
+            print(decodedData.name)
+            print(decodedData.main.temp)
+            print(decodedData.weather[0].description)
+        } catch {
+            print(error)
         }
     }
-    
 }
